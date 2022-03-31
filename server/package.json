@@ -1,0 +1,26 @@
+{
+  "name": "server-chat-app",
+  "version": "1.0.0",
+  "description": "This is server chat app",
+  "main": "main.js",
+  "author": "Hung Nguyen",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "node -r esm main.js",
+    "start:dev": "nodemon -r esm main.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.9",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
