@@ -20,7 +20,7 @@ function App() {
             </Routes>
           </BrowserRouter>
         </Provider>
-        <ToastContainer />
+        <ToastContainer autoClose={3000} />
       </React.Suspense>
     </ErrorBoundary>
   );

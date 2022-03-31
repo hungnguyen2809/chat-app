@@ -16,3 +16,9 @@ export const connectMongoDB = () => {
     logger.success('Connect MongoDB');
   });
 };
+
+export const disconnectMongoDB = () => {
+  mongoose.connection.close(false, () => {
+    logger.success('Close MongoDB');
+  });
+};

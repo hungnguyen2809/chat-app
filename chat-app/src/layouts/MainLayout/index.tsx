@@ -1,11 +1,15 @@
 import routesMaps from 'layouts/routesMaps';
-import React from 'react';
+import { trim } from 'lodash';
+import React, { useMemo } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-
-const isLogined = true;
+import { getLocalData } from 'services';
 
 function MainLayout() {
   const location = useLocation();
+
+  const isLogined = useMemo(() => {
+    return trim(getLocalData('accessToken'));
+  }, []);
 
   return (
     <section>

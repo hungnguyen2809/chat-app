@@ -11,11 +11,13 @@ function RegisterPage() {
   const navigate = useNavigate();
 
   const usernameRef = useRef<HTMLInputElement>(null);
+  const fullnameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confrimPassRef = useRef<HTMLInputElement>(null);
 
   const [username, setUsername] = useState<string>('');
+  const [fullname, setFullname] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfrimPassword] = useState<string>('');
@@ -29,6 +31,16 @@ function RegisterPage() {
     if (username.length < 5) {
       toastError('Username is less than 5 characters');
       usernameRef.current?.focus();
+      return true;
+    }
+    if (!fullname) {
+      toastError('Please enter Fullname.');
+      fullnameRef.current?.focus();
+      return true;
+    }
+    if (fullname.length < 5) {
+      toastError('Fullname is less than 5 characters');
+      fullnameRef.current?.focus();
       return true;
     }
     if (!email) {
@@ -68,7 +80,8 @@ function RegisterPage() {
       return;
     }
 
-    dispatch(authActions.registerUser({ username, password, email, navigate }));
+    const payload = { username, fullname, password, email, navigate };
+    dispatch(authActions.registerUser(payload));
   };
 
   const handleChangeText =
@@ -95,6 +108,15 @@ function RegisterPage() {
           placeholder="Username"
           className="form-register-input"
           onChange={handleChangeText(setUsername)}
+        />
+        <input
+          ref={fullnameRef}
+          type="text"
+          name="fullname"
+          id="fullname"
+          placeholder="Fullname"
+          className="form-register-input"
+          onChange={handleChangeText(setFullname)}
         />
         <input
           ref={emailRef}

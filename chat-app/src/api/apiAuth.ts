@@ -1,13 +1,13 @@
 import { BaseResponse } from 'models';
-import { AuthRegister, UserResponse } from 'redux/auth/type';
-import { axiosClient } from './createRequest';
+import { AuthLogin, AuthRegister, UserResponse } from 'redux/auth/type';
+import { axiosAuth } from './createRequest';
 
 const authApi = {
-  registerUser: (data: AuthRegister): Promise<BaseResponse<UserResponse>> => {
-    return axiosClient.post('/auth-register', data);
+  registerUser: (data: AuthRegister): Promise<BaseResponse<object>> => {
+    return axiosAuth.post('/auth/user-register', data);
   },
-  loginUser: (data: object): Promise<BaseResponse<UserResponse>> => {
-    return axiosClient.post('/auth-login', data);
+  loginUser: (data: AuthLogin): Promise<BaseResponse<UserResponse>> => {
+    return axiosAuth.post('/auth/user-login', data);
   },
 };
 

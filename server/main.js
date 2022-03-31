@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import express from 'express';
 import { createServer } from 'http';
 import { connectMongoDB } from './src/database';
+import routes from './src/routes';
 
 config();
 const PORT = process.env.PORT || 8088;
@@ -18,6 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   return res.json({ message: 'Halo, Wellcome' });
 });
+
+app.use('/api/v1', routes);
 
 server.listen(PORT, () => {
   console.log(`Server is running at port: ${PORT}`);

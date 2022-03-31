@@ -1,38 +1,45 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { merge } from 'lodash';
 import QueryString from 'qs';
+import { getLocalData } from 'services';
 import { REACT_APP_BASE_URL } from 'utils/env';
 
+axios.defaults.timeout = 10000;
+axios.defaults.timeoutErrorMessage = 'Connection timeout !';
 axios.defaults.paramsSerializer = (params) => QueryString.stringify(params, { indices: false });
 
-/**  */
+/** Request API without Authorization */
+export const axiosAuth = axios.create({
+  baseURL: REACT_APP_BASE_URL,
+});
+
+axiosAuth.interceptors.response.use(
+  (response) => response.data,
+  (error) => Promise.reject(error)
+);
+
+/** Request API with Authorization */
 export const axiosClient = axios.create({
   baseURL: REACT_APP_BASE_URL,
 });
 
 const configure = (config: AxiosRequestConfig): AxiosRequestConfig => {
+  const accessToken = getLocalData('accessToken');
+
   const targetConfig: AxiosRequestConfig = {
     headers: {
-      Authentication: 'token-HgedhdYIeqwkndkhdh567',
+      Authorization: `Bearer ${accessToken}`,
     },
   };
   return merge(config, targetConfig);
 };
 
 axiosClient.interceptors.request.use(
-  (config) => {
-    return configure(config);
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (config) => configure(config),
+  (error) => Promise.reject(error)
 );
 
 axiosClient.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (response) => response.data,
+  (error) => Promise.reject(error)
 );
