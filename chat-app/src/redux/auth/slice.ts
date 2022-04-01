@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
-import { AuthState, PayloadLogin, PayloadRegister, UserResponse } from './type';
+import { AuthState, PayloadLogin, PayloadRegister, PayloadUpdateAvtar } from './type';
 
 const initialState: AuthState = {
   loading: false,
@@ -14,21 +14,21 @@ const authSilce = createSlice({
     registerUser: (state, action: PayloadAction<PayloadRegister>) => {
       state.loading = true;
     },
-    registerSuccess: (state) => {
-      state.loading = false;
-    },
-    registerFailed: (state) => {
+    registerFinish: (state) => {
       state.loading = false;
     },
     // -------
     loginUser: (state, action: PayloadAction<PayloadLogin>) => {
       state.loading = true;
     },
-    loginSuccess: (state, action: PayloadAction<UserResponse>) => {
+    loginFinish: (state) => {
       state.loading = false;
-      state.userInfo = action.payload;
     },
-    loginFailed: (state) => {
+    //
+    updateAvatar: (state, action: PayloadAction<PayloadUpdateAvtar>) => {
+      state.loading = true;
+    },
+    updateAvatarFinish: (state) => {
       state.loading = false;
     },
   },
@@ -37,6 +37,7 @@ const authSilce = createSlice({
 export const authActions = authSilce.actions;
 
 export const selectUserInfo = (state: RootState) => state.auth.userInfo;
+export const selectAuthLoading = (state: RootState) => state.auth.loading;
 
 export const authReducer = authSilce.reducer;
 export default authReducer;

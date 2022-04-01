@@ -1,14 +1,17 @@
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import logo from 'assets/images/logo.svg';
 import routesMaps from 'layouts/routesMaps';
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { authActions } from 'redux/auth/slice';
+import HashLoader from 'react-spinners/HashLoader';
+import { authActions, selectAuthLoading } from 'redux/auth/slice';
 import { toastError } from 'utils/toastify';
 
 function RegisterPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const loading = useAppSelector(selectAuthLoading);
 
   const usernameRef = useRef<HTMLInputElement>(null);
   const fullnameRef = useRef<HTMLInputElement>(null);
@@ -146,8 +149,9 @@ function RegisterPage() {
           onChange={handleChangeText(setConfrimPassword)}
         />
 
-        <button className="bg-[#997af0] text-white text-base px-8 py-4 font-bold rounded-md cursor-pointer transition ease-in-out delay-[0.3s] hover:bg-[#4e0eff] hover:scale-110">
-          Create User
+        <button className="btn-submit flex justify-center items-center">
+          <HashLoader color={'#fff'} loading={loading} size={20} />
+          <p className="ml-[10px]">Create User</p>
         </button>
         <span className="text-white">
           Already have an account ?{' '}

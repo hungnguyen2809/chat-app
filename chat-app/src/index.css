@@ -25,4 +25,12 @@ code {
   .form-register-input {
     @apply bg-transparent p-4 border-[0.1rem] border-solid border-[#4e0eff] rounded-[0.4rem] text-white w-[100%] text-[1rem] focus:border-[0.1rem] focus:border-solid focus:border-[#997af0] focus:outline-none;
   }
+
+  .profile-choose-avatar {
+    @apply border-[0.4rem] border-solid border-transparent p-[0.4rem] rounded-[5rem] flex justify-center items-end transition delay-100 ease-in-out;
+  }
+
+  .btn-submit {
+    @apply bg-[#997af0] text-white text-base px-8 py-4 font-bold rounded-md cursor-pointer transition ease-in-out delay-[0.3s] hover:bg-[#4e0eff] hover:scale-110;
+  }
 }

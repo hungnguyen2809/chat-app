@@ -1,12 +1,15 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import routesMaps from 'layouts/routesMaps';
+import { trim } from 'lodash';
+import React, { useMemo } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { getLocalData } from 'services';
 
 function AuthLayout() {
-  return (
-    <section>
-      <Outlet />
-    </section>
-  );
+  const isLogined = useMemo(() => {
+    return trim(getLocalData('accessToken'));
+  }, []);
+
+  return <section>{!isLogined ? <Outlet /> : <Navigate to={routesMaps.HOME} />}</section>;
 }
 
 export default AuthLayout;

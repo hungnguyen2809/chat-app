@@ -40,7 +40,7 @@ const AuthController = {
    */
   registerUser: async (req, res) => {
     try {
-      const { username, password, fullname } = req.body;
+      const { username, email, password, fullname } = req.body;
 
       if (isUndefined(username) || isUndefined(password) || isUndefined(fullname)) {
         return res.json(
@@ -56,7 +56,7 @@ const AuthController = {
       const slat = await bcrypt.genSalt(10);
       const passwordHash = await bcrypt.hash(password, slat);
 
-      const newUser = new UserModel({ username, fullname, password: passwordHash });
+      const newUser = new UserModel({ username, fullname, email, password: passwordHash });
       await newUser.save();
 
       return res.json(ResponseService.sucess());

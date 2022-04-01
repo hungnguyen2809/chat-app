@@ -38,7 +38,7 @@ const JWT = {
       }
 
       const verified = jwt.verify(token, SECRET_KEY);
-      req.user = verified; //gán thông tin đã xác thực cho request => các controller cần xử dụng không cần decode lại
+      req.userInfo = verified; //gán thông tin đã xác thực cho request => các controller cần xử dụng không cần decode lại
       next();
     } catch (error) {
       return res.status(403).json(ResponseService.error('Invalid Token', 403));

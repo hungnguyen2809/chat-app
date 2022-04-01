@@ -25,6 +25,12 @@ export interface PayloadLogin extends AuthLogin {
   navigate: NavigateFunction;
 }
 
+export interface PayloadUpdateAvtar {
+  id: string;
+  image: string;
+  navigate: NavigateFunction;
+}
+
 export interface UserResponse {
   id?: string;
   username?: string;
