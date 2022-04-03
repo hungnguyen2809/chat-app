@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HashLoader from 'react-spinners/HashLoader';
-import { authActions, selectAuthLoading } from 'redux/auth/slice';
+import { selectUserLoading, userActions } from 'redux/user/slice';
 import { getLocalData } from 'services';
 import { toastError } from 'utils/toastify';
 
@@ -13,7 +13,7 @@ function ProfilePage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const loadingAuth = useAppSelector(selectAuthLoading);
+  const loadingAuth = useAppSelector(selectUserLoading);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [avatars, setAvatars] = useState<string[]>([]);
@@ -53,7 +53,7 @@ function ProfilePage() {
 
     const userInfo = getLocalData('userInfo');
     dispatch(
-      authActions.updateAvatar({
+      userActions.updateAvatar({
         id: userInfo?.id,
         image: avatars[avatarSelected],
         navigate,

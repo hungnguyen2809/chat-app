@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
-import { AuthState, PayloadLogin, PayloadRegister, PayloadUpdateAvtar } from './type';
+import { AuthState, PayloadLogin, PayloadRegister } from './type';
 
 const initialState: AuthState = {
   loading: false,
@@ -22,13 +22,6 @@ const authSilce = createSlice({
       state.loading = true;
     },
     loginFinish: (state) => {
-      state.loading = false;
-    },
-    //
-    updateAvatar: (state, action: PayloadAction<PayloadUpdateAvtar>) => {
-      state.loading = true;
-    },
-    updateAvatarFinish: (state) => {
       state.loading = false;
     },
   },

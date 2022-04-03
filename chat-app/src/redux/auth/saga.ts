@@ -1,6 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import authApi from 'api/apiAuth';
-import apiChatApp from 'api/apiChatApp';
 import routesMaps from 'layouts/routesMaps';
 import { get } from 'lodash';
 import { BaseResponse } from 'models';
@@ -9,7 +8,7 @@ import { setLocalData } from 'services';
 import { MESSAGE_ERR } from 'utils/commom';
 import { toastError, toastSuccess } from 'utils/toastify';
 import { authActions } from './slice';
-import { PayloadRegister, PayloadUpdateAvtar, UserResponse } from './type';
+import { PayloadRegister, UserResponse } from './type';
 
 function* registerUser(action: PayloadAction<PayloadRegister>) {
   try {
@@ -58,31 +57,7 @@ function* loginUser(action: PayloadAction<PayloadRegister>) {
   }
 }
 
-function* updateAvatar(action: PayloadAction<PayloadUpdateAvtar>) {
-  try {
-    yield delay(1000);
-
-    const { navigate, ...data } = action.payload;
-    const response: BaseResponse<object> = yield call(apiChatApp.updateAvatar, data);
-    if (response.error) {
-      toastError(response.message);
-      yield put(authActions.updateAvatarFinish());
-      return;
-    }
-
-    setLocalData('userInfo', response.data);
-    toastSuccess('Update success!', { autoClose: 1500 });
-
-    yield put(authActions.updateAvatarFinish());
-    navigate(routesMaps.HOME);
-  } catch (error) {
-    toastError(get(error, 'message') || MESSAGE_ERR);
-    yield put(authActions.updateAvatarFinish());
-  }
-}
-
 export default function* authSaga() {
   yield takeEvery(authActions.registerUser.type, registerUser);
   yield takeEvery(authActions.loginUser.type, loginUser);
-  yield takeEvery(authActions.updateAvatar.type, updateAvatar);
 }

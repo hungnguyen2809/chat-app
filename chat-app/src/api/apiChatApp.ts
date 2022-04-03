@@ -1,9 +1,19 @@
+import { BaseResponse, UserInfo } from 'models';
 import { axiosClient } from './createRequest';
-import URLChatApp from './urlChatApp';
+import ChatApp_URL from './urlChatApp';
 
 const apiChatApp = {
+  allUser: (): Promise<BaseResponse<UserInfo>> => {
+    return axiosClient.get(ChatApp_URL.user);
+  },
+  allUserOther: (id: string): Promise<BaseResponse<UserInfo[]>> => {
+    return axiosClient.get(`${ChatApp_URL.allUserOther}/${id}`);
+  },
+  userById: (id: string): Promise<any> => {
+    return axiosClient.get(`${ChatApp_URL.user}/${id}`);
+  },
   updateAvatar: ({ id, image }: { id: string; image: string }): Promise<any> => {
-    return axiosClient.post(`${URLChatApp.updateAvatar}/${id}`, { image });
+    return axiosClient.post(`${ChatApp_URL.updateAvatar}/${id}`, { image });
   },
 };
 

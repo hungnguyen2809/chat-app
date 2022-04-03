@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { get, isUndefined } from 'lodash';
-import UserModel from '../models/User';
+import UserModel from '../models/UserModel';
 import { ResponseService } from '../services';
 import JWT from './middleware/jwt';
 
