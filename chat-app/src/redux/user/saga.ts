@@ -54,8 +54,6 @@ function* updateAvatar(action: PayloadAction<PayloadUpdateAvtar>) {
 
 function* addMessage(action: PayloadAction<PayloadAddMessage>) {
   try {
-    yield delay(1000);
-
     const response: BaseResponse = yield call(apiChatApp.addMessage, action.payload);
     if (response.error) {
       toastError(response.message);
@@ -72,8 +70,6 @@ function* addMessage(action: PayloadAction<PayloadAddMessage>) {
 
 function* getAllMessage(action: PayloadAction<PayloadAddMessage>) {
   try {
-    yield delay(1000);
-
     const response: BaseResponse<MessageUser[]> = yield call(
       apiChatApp.getAllMessage,
       action.payload

@@ -8,6 +8,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { selectUserListContact, userActions } from 'redux/user/slice';
 import { getLocalData } from 'services';
+import SocketManager from 'socket';
+import { SK_CS_ADD_USER } from 'socket/constants';
 
 function ChatPage() {
   const navigate = useNavigate();
@@ -22,6 +24,12 @@ function ChatPage() {
     const userInfo = getLocalData('userInfo');
     setCurrentUser(userInfo);
   }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      SocketManager.emit(SK_CS_ADD_USER, currentUser.id);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     if (!currentUser) return;

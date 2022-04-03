@@ -52,6 +52,11 @@ const userSilce = createSlice({
     getAllMessageFinish: (state) => {
       state.loadingMessage = false;
     },
+    updateListMessages: (state, action: PayloadAction<MessageUser>) => {
+      const msgs = [...state.listMessage];
+      msgs.push(action.payload);
+      state.listMessage = msgs;
+    },
   },
 });
 

@@ -21,7 +21,7 @@ const configure = (config: AxiosRequestConfig): AxiosRequestConfig => {
 
 /** Request API without Authorization */
 export const axiosAuth = axios.create({
-  baseURL: REACT_APP_BASE_URL,
+  baseURL: `${REACT_APP_BASE_URL}/api/v1`,
 });
 
 axiosAuth.interceptors.response.use(
@@ -31,7 +31,7 @@ axiosAuth.interceptors.response.use(
 
 /** Request API with Authorization */
 export const axiosClient = axios.create({
-  baseURL: REACT_APP_BASE_URL,
+  baseURL: `${REACT_APP_BASE_URL}/api/v1`,
 });
 
 axiosClient.interceptors.request.use(

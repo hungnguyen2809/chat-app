@@ -5,6 +5,9 @@ import { UserInfo } from 'models';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { selectUserListMessage, userActions } from 'redux/user/slice';
+import SocketManager from 'socket';
+import { SK_CS_SEND_MESSAGE, SK_SS_SEND_MESSAGE } from 'socket/constants';
+import { v4 as uuid } from 'uuid';
 
 interface ChatContainerProps {
   chatInfo?: UserInfo;
@@ -15,6 +18,12 @@ function ChatContainer({ chatInfo, userInfo }: ChatContainerProps) {
   const dispatch = useDispatch();
 
   const listMessage = useAppSelector(selectUserListMessage);
+
+  useEffect(() => {
+    SocketManager.on(SK_SS_SEND_MESSAGE, (msg: string) => {
+      userActions.updateListMessages({ id: uuid(), fromSelf: false, message: msg });
+    });
+  }, []);
 
   useEffect(() => {
     if (userInfo && chatInfo) {
@@ -31,6 +40,14 @@ function ChatContainer({ chatInfo, userInfo }: ChatContainerProps) {
           message: mes,
         })
       );
+
+      SocketManager.emit(SK_CS_SEND_MESSAGE, {
+        from: userInfo.id,
+        to: chatInfo.id,
+        message: mes,
+      });
+
+      dispatch(userActions.updateListMessages({ id: uuid(), fromSelf: true, message: mes }));
     }
   };
 

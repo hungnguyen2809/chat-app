@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { MessageUser } from 'redux/user/type';
 import styled from 'styled-components';
 
@@ -7,10 +7,23 @@ interface ChatMessageProps {
 }
 
 function ChatMessage({ listMessage }: ChatMessageProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!listMessage) return;
+
+    if (listMessage.length && scrollRef.current) {
+      const scroll = scrollRef.current;
+      setTimeout(() => {
+        scroll.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [listMessage]);
+
   return (
     <Container>
       {listMessage?.map((mes) => (
-        <div key={mes.id}>
+        <div ref={scrollRef} key={mes.id}>
           <div className={`message ${mes.fromSelf ? 'sender' : 'receiver'}`}>
             <div className="message-content">
               <p>{mes.message}</p>
@@ -30,6 +43,14 @@ const Container = styled.div`
   flex-direction: column;
   gap: 1rem;
   overflow: auto;
+  &::-webkit-scrollbar {
+    width: 0.2 rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    width: 0.1rem;
+    background-color: #ffffff39;
+    border-radius: 1rem;
+  }
 
   .message {
     display: flex;

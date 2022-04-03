@@ -35,10 +35,11 @@ function ChatInput({ onSendMessage }: ChatInputProps) {
     if (mesContent.length <= 0) return;
 
     onSendMessage(mesContent);
+    setMsg('');
   };
 
   return (
-    <Container>
+    <Container className="md-2:p-[0.1rem] md-2:gap-4">
       <div className="btn-container">
         <div className="emoji">
           <BsEmojiSmileFill
@@ -59,8 +60,8 @@ function ChatInput({ onSendMessage }: ChatInputProps) {
             showEmoji && toggleShowEmoji();
           }}
         />
-        <button type="submit" className="submit">
-          <IoMdSend color="#fff" className="text-[2rem]" />
+        <button type="submit" className="md-2:p-[0.3rem_1rem]">
+          <IoMdSend color="#fff" className="text-[2rem] md-2:text-[1rem]" />
         </button>
       </form>
     </Container>
