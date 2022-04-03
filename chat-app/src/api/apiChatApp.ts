@@ -1,4 +1,5 @@
 import { BaseResponse, UserInfo } from 'models';
+import { PayloadAddMessage, PayloadAllMessage } from 'redux/user/type';
 import { axiosClient } from './createRequest';
 import ChatApp_URL from './urlChatApp';
 
@@ -14,6 +15,12 @@ const apiChatApp = {
   },
   updateAvatar: ({ id, image }: { id: string; image: string }): Promise<any> => {
     return axiosClient.post(`${ChatApp_URL.updateAvatar}/${id}`, { image });
+  },
+  addMessage: (data: PayloadAddMessage): Promise<any> => {
+    return axiosClient.post(ChatApp_URL.addMessage, data);
+  },
+  getAllMessage: (data: PayloadAllMessage): Promise<any> => {
+    return axiosClient.post(ChatApp_URL.getAllMessage, data);
   },
 };
 

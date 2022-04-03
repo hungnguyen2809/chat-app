@@ -46,7 +46,7 @@ function ChatPage() {
         {currentChat === undefined ? (
           <Welcome userInfo={currentUser} />
         ) : (
-          <ChatContainer chatInfo={currentChat} />
+          <ChatContainer chatInfo={currentChat} userInfo={currentUser} />
         )}
       </div>
     </div>

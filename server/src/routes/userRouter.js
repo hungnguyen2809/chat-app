@@ -5,17 +5,17 @@ import UserController from '../controllers/UserController';
 const userRouter = Router();
 
 /**
- * @route POST /api/v1/user/
+ * @route GET /api/v1/user/
  * @access private
  */
 userRouter.get('/', MiddlewareController.verify, UserController.getAllUser);
 /**
- * @route POST /api/v1/user/all-other/:id
+ * @route GET /api/v1/user/all-other/:id
  * @access private
  */
 userRouter.get('/all-other/:id', MiddlewareController.verify, UserController.getAllUserOtherId);
 /**
- * @route POST /api/v1/user/:id
+ * @route GET /api/v1/user/:id
  * @access private
  */
 userRouter.get('/:id', MiddlewareController.verify, UserController.getUserId);

@@ -1,19 +1,41 @@
+import { useAppSelector } from 'app/hooks';
 import ChatInput from 'components/ChatInput';
 import ChatMessage from 'components/ChatMessage';
 import { UserInfo } from 'models';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { selectUserListMessage, userActions } from 'redux/user/slice';
 
 interface ChatContainerProps {
   chatInfo?: UserInfo;
+  userInfo?: UserInfo;
 }
 
-function ChatContainer({ chatInfo }: ChatContainerProps) {
+function ChatContainer({ chatInfo, userInfo }: ChatContainerProps) {
+  const dispatch = useDispatch();
+
+  const listMessage = useAppSelector(selectUserListMessage);
+
+  useEffect(() => {
+    if (userInfo && chatInfo) {
+      dispatch(userActions.getAllMessage({ from: userInfo.id, to: chatInfo.id }));
+    }
+  }, [dispatch, userInfo, chatInfo]);
+
   const handleSendMessage = (mes: string) => {
-    console.log(mes);
+    if (userInfo && chatInfo) {
+      dispatch(
+        userActions.addMessage({
+          from: userInfo.id,
+          to: chatInfo.id,
+          message: mes,
+        })
+      );
+    }
   };
 
   return chatInfo ? (
-    <div className="pt-4">
+    <div className="pt-4 grid grid-rows-[10%_78%_12%] gap-4 overflow-hidden">
       <div className="flex justify-between items-center p-1">
         <div className="flex item-center gap-4">
           <div className="avatar">
@@ -29,7 +51,7 @@ function ChatContainer({ chatInfo }: ChatContainerProps) {
           </div>
         </div>
       </div>
-      <ChatMessage />
+      <ChatMessage listMessage={listMessage} />
       <ChatInput onSendMessage={handleSendMessage} />
     </div>
   ) : null;

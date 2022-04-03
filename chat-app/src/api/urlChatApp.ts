@@ -5,6 +5,9 @@ const ChatApp_URL = {
   user: '/user',
   allUserOther: '/user/all-other',
   updateAvatar: '/user/avatar',
+  //
+  getAllMessage: '/message/get-all',
+  addMessage: '/message/add-message'
 };
 
 export default ChatApp_URL;

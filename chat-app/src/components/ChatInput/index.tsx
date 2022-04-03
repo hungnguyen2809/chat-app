@@ -75,7 +75,8 @@ const Container = styled.div`
   align-items: center;
   background-color: #080420;
   padding-bottom: 0.3rem;
-  margin: 0 2rem;
+  padding: 0 2rem;
+  margin-bottom: 2rem;
   .btn-container {
     display: flex;
     align-items: center;
@@ -121,7 +122,6 @@ const Container = styled.div`
     background-color: #ffffff34;
     input {
       width: 90%;
-      height: 60%;
       background-color: transparent;
       color: white;
       border: none;

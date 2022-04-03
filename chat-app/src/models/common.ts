@@ -1,4 +1,4 @@
-export interface BaseResponse<T> {
+export interface BaseResponse<T = any> {
   data: T;
   error: boolean;
   status: number;
