@@ -24,11 +24,6 @@ export const axiosAuth = axios.create({
   baseURL: `${REACT_APP_BASE_URL}/api/v1`,
 });
 
-axiosAuth.interceptors.response.use(
-  (response) => response.data,
-  (error) => Promise.reject(error)
-);
-
 /** Request API with Authorization */
 export const axiosClient = axios.create({
   baseURL: `${REACT_APP_BASE_URL}/api/v1`,
@@ -39,17 +34,7 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-axiosClient.interceptors.response.use(
-  (response) => response.data,
-  (error) => Promise.reject(error)
-);
-
 /** Request API Multiavatar */
 export const multiAvatarApi = axios.create({
   baseURL: REACT_APP_AVATAR_API,
 });
-
-multiAvatarApi.interceptors.response.use(
-  (response) => response.data,
-  (error) => Promise.reject(error)
-);

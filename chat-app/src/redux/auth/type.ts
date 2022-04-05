@@ -1,7 +1,4 @@
-import { NavigateFunction } from 'react-router-dom';
-
 export interface AuthState {
-  loading: boolean;
   userInfo: UserResponse;
 }
 
@@ -17,20 +14,6 @@ export interface AuthLogin {
   password: string;
 }
 
-export interface PayloadRegister extends AuthRegister {
-  navigate: NavigateFunction;
-}
-
-export interface PayloadLogin extends AuthLogin {
-  navigate: NavigateFunction;
-}
-
-export interface PayloadUpdateAvtar {
-  id: string;
-  image: string;
-  navigate: NavigateFunction;
-}
-
 export interface UserResponse {
   id?: string;
   username?: string;
@@ -38,4 +21,12 @@ export interface UserResponse {
   email?: string;
   avatar?: string;
   token?: string;
+}
+
+export interface UserInfo {
+  id: string;
+  username: string;
+  fullname?: string;
+  email?: string;
+  avatar?: string;
 }

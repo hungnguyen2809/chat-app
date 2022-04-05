@@ -1,17 +1,16 @@
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch } from 'app/hooks';
 import logo from 'assets/images/logo.svg';
 import routesMaps from 'layouts/routesMaps';
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import HashLoader from 'react-spinners/HashLoader';
-import { authActions, selectAuthLoading } from 'redux/auth/slice';
-import { toastError } from 'utils/toastify';
+import { actionAuthRegisterUser } from 'redux/auth/actions';
+import { getMessageError } from 'utils/commom';
+import { toastError, toastSuccess } from 'utils/toastify';
 
 function RegisterPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const loading = useAppSelector(selectAuthLoading);
 
   const usernameRef = useRef<HTMLInputElement>(null);
   const fullnameRef = useRef<HTMLInputElement>(null);
@@ -19,6 +18,7 @@ function RegisterPage() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const confrimPassRef = useRef<HTMLInputElement>(null);
 
+  const [loading, setLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
   const [fullname, setFullname] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -76,28 +76,32 @@ function RegisterPage() {
     return false;
   };
 
-  const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (handleValidateData()) {
       return;
     }
 
-    const payload = { username, fullname, password, email, navigate };
-    dispatch(authActions.registerUser(payload));
+    try {
+      setLoading(true);
+      await dispatch(actionAuthRegisterUser({ username, fullname, password, email }));
+      setLoading(false);
+      toastSuccess('Create success user !');
+      navigate(routesMaps.LOGIN_PAGE);
+    } catch (error) {
+      setLoading(false);
+      toastError(getMessageError(error));
+    }
   };
 
-  const handleChangeText =
-    (setValueFunction: Function) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValueFunction(event.target.value);
-    };
+  const handleChangeText = (setValueFunction: Function) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValueFunction(event.target.value);
+  };
 
   return (
     <div className="w-[100%] h-[100vh] flex flex-col justify-center items-center gap-4 bg-[#131324]">
-      <form
-        onSubmit={handleSubmitForm}
-        className="flex flex-col gap-8 bg-[#00000076] rounded-[2rem] py-12 px-20"
-      >
+      <form onSubmit={handleSubmitForm} className="flex flex-col gap-8 bg-[#00000076] rounded-[2rem] py-12 px-20">
         <div className="flex items-center justify-center gap-4">
           <img src={logo} alt="logo-snappy" className="h-[5rem]" />
           <h1 className="text-white uppercase">snappy</h1>

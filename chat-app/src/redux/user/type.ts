@@ -1,12 +1,8 @@
-import { UserInfo } from 'models';
+import { UserInfo } from 'redux/auth/type';
 
 export interface UserState {
-  loading: boolean;
+  listAllUser: UserInfo[];
   listContact: UserInfo[];
-
-  loadingAddMessage: boolean;
-
-  loadingMessage: boolean;
   listMessage: MessageUser[];
 }
 

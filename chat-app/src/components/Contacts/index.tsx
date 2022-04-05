@@ -1,10 +1,12 @@
-import { useAppSelector } from 'app/hooks';
+import { useAppDispatch } from 'app/hooks';
 import logo from 'assets/images/logo.svg';
 import Logout from 'components/Logout';
-import { UserInfo } from 'models';
-import React, { useEffect, useState } from 'react';
+import routesMaps from 'layouts/routesMaps';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BounceLoader from 'react-spinners/BounceLoader';
-import { selectUserLoading } from 'redux/user/slice';
+import { UserInfo } from 'redux/auth/type';
+import { actionUserLoadLstContact } from 'redux/user/actions';
 
 interface ContactsProps {
   contacts?: UserInfo[];
@@ -13,10 +15,35 @@ interface ContactsProps {
 }
 
 function Contacts({ contacts, userInfo, onChangeChat }: ContactsProps) {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState<boolean>(false);
   const [userAvatar, setUserAvatar] = useState<string>('');
   const [contactSelected, setContactSelected] = useState<number>();
 
-  const loadingContacts = useAppSelector(selectUserLoading);
+  const handleLoadLstContact = useCallback(
+    async (id: string) => {
+      try {
+        setLoading(true);
+        await dispatch(actionUserLoadLstContact({ id }));
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    if (!userInfo) return;
+
+    if (!userInfo.avatar) {
+      navigate(routesMaps.PROFILE_PAGE);
+    }
+
+    handleLoadLstContact(userInfo.id);
+  }, [navigate, userInfo, handleLoadLstContact]);
 
   useEffect(() => {
     if (userInfo && userInfo.avatar) {
@@ -38,7 +65,7 @@ function Contacts({ contacts, userInfo, onChangeChat }: ContactsProps) {
         <h3 className="text-white text-sm uppercase font-bold">snappy</h3>
       </div>
       <div className="flex flex-col items-center overflow-auto gap-[0.8rem]">
-        {loadingContacts ? (
+        {loading ? (
           <div className="h-[100%] w-[100%] flex justify-center items-center">
             <BounceLoader color="#9186f3" size={50} />
           </div>

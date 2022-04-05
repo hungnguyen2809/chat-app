@@ -27,7 +27,7 @@ const AuthController = {
       }
 
       const { id, username, fullname, email, avatar } = findUser;
-      const token = JWT.sign({ id, username, fullname, email, avatar });
+      const token = JWT.sign({ id, username, fullname, email });
 
       const data = { id, username, fullname, email, avatar, token };
       return res.json(ResponseService.sucess(data));

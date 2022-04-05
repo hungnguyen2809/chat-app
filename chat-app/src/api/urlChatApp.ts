@@ -3,7 +3,7 @@ const ChatApp_URL = {
   loginUser: '/auth/user-login',
   //
   user: '/user',
-  allUserOther: '/user/all-other',
+  allContacts: '/user/all-other',
   updateAvatar: '/user/avatar',
   //
   getAllMessage: '/message/get-all',

@@ -1,21 +1,21 @@
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch } from 'app/hooks';
 import logo from 'assets/images/logo.svg';
 import routesMaps from 'layouts/routesMaps';
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import HashLoader from 'react-spinners/HashLoader';
-import { authActions, selectAuthLoading } from 'redux/auth/slice';
+import { actionAuthLoginUser } from 'redux/auth/actions';
+import { getMessageError } from 'utils/commom';
 import { toastError } from 'utils/toastify';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const loading = useAppSelector(selectAuthLoading);
-
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
+  const [loading, setLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -44,21 +44,28 @@ function LoginPage() {
     return false;
   };
 
-  const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (handleValidateData()) {
       return;
     }
 
-    const payload = { username, password, navigate };
-    dispatch(authActions.loginUser(payload));
+    try {
+      setLoading(true);
+      await dispatch(actionAuthLoginUser({ username, password }));
+
+      setLoading(false);
+      navigate(routesMaps.HOME);
+    } catch (error) {
+      toastError(getMessageError(error));
+      setLoading(false);
+    }
   };
 
-  const handleChangeText =
-    (setValueFunction: Function) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValueFunction(event.target.value);
-    };
+  const handleChangeText = (setValueFunction: Function) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValueFunction(event.target.value);
+  };
 
   //   const navigate = useNavigate();
   //   const location = useLocation();
@@ -77,10 +84,7 @@ function LoginPage() {
 
   return (
     <div className="w-[100%] h-[100vh] flex flex-col justify-center items-center gap-4 bg-[#131324]">
-      <form
-        onSubmit={handleSubmitForm}
-        className="flex flex-col gap-8 bg-[#00000076] rounded-[2rem] py-12 px-20"
-      >
+      <form onSubmit={handleSubmitForm} className="flex flex-col gap-8 bg-[#00000076] rounded-[2rem] py-12 px-20">
         <div className="flex items-center justify-center gap-4">
           <img src={logo} alt="logo-snappy" className="h-[5rem]" />
           <h1 className="text-white uppercase">snappy</h1>

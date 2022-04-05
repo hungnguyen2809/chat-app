@@ -1,10 +1,10 @@
-import { useAppSelector } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import ChatInput from 'components/ChatInput';
 import ChatMessage from 'components/ChatMessage';
-import { UserInfo } from 'models';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { selectUserListMessage, userActions } from 'redux/user/slice';
+import { UserInfo } from 'redux/auth/type';
+import { actionUserAddMessage, actionUserLstAllMessage, actionUserUpdateLstMessage } from 'redux/user/actions';
+import { selectUserLstMessage } from 'redux/user/selectors';
 import SocketManager from 'socket';
 import { SK_CS_SEND_MESSAGE, SK_SS_SEND_MESSAGE } from 'socket/constants';
 import { v4 as uuid } from 'uuid';
@@ -15,39 +15,29 @@ interface ChatContainerProps {
 }
 
 function ChatContainer({ chatInfo, userInfo }: ChatContainerProps) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const listMessage = useAppSelector(selectUserListMessage);
+  const listMessage = useAppSelector(selectUserLstMessage);
 
   useEffect(() => {
     SocketManager.on(SK_SS_SEND_MESSAGE, (msg: string) => {
-      userActions.updateListMessages({ id: uuid(), fromSelf: false, message: msg });
+      dispatch(actionUserUpdateLstMessage({ id: uuid(), fromSelf: false, message: msg }));
     });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (userInfo && chatInfo) {
-      dispatch(userActions.getAllMessage({ from: userInfo.id, to: chatInfo.id }));
+      dispatch(actionUserLstAllMessage({ from: userInfo.id, to: chatInfo.id }));
     }
   }, [dispatch, userInfo, chatInfo]);
 
   const handleSendMessage = (mes: string) => {
     if (userInfo && chatInfo) {
-      dispatch(
-        userActions.addMessage({
-          from: userInfo.id,
-          to: chatInfo.id,
-          message: mes,
-        })
-      );
-
-      SocketManager.emit(SK_CS_SEND_MESSAGE, {
-        from: userInfo.id,
-        to: chatInfo.id,
-        message: mes,
-      });
-
-      dispatch(userActions.updateListMessages({ id: uuid(), fromSelf: true, message: mes }));
+      dispatch(actionUserUpdateLstMessage({ id: uuid(), fromSelf: true, message: mes }));
+      try {
+        dispatch(actionUserAddMessage({ from: userInfo.id, to: chatInfo.id, message: mes }));
+      } catch (error) {}
+      SocketManager.emit(SK_CS_SEND_MESSAGE, { from: userInfo.id, to: chatInfo.id, message: mes });
     }
   };
 
